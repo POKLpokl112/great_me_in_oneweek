@@ -1,12 +1,10 @@
 package gtapi;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 
@@ -113,30 +111,6 @@ public class GT_Crack {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		final CloseableHttpClient httpClient = GTUtil.getHttpClient();
-		final HttpGet httpGet = GTUtil
-				.getHttpGet("http://localhost:8080/pc-geetest/register?t=" + System.currentTimeMillis(), null);
-
-		final CloseableHttpClient httpClient1 = GTUtil.getHttpClient();
-		String s = crackGT(httpClient1, httpGet, 2 + (int) (Math.random() * 8), GTUtil.startString(httpClient, httpGet),
-				"http://localhost:8080/index.jsp");
-		while (s == null) {
-			Util.sleepInSeconds(2);
-			httpGet.setURI(new URI("http://localhost:8080/pc-geetest/register?t=" + System.currentTimeMillis()));
-			s = crackGT(httpClient1, httpGet, 2 + (int) (Math.random() * 8), GTUtil.startString(httpClient, httpGet),
-					"http://localhost:8080/index.jsp");
-		}
-
-		final String challenge = Util.parseRegex(s, "geetest_challenge=([^&]+)");
-		final String validate = Util.parseRegex(s, "geetest_validate=([^&]+)");
-		final Map<String, String> map = new HashMap<>();
-		map.put("username", "极验验证");
-		map.put("password", "123456");
-		map.put("geetest_challenge", challenge);
-		map.put("geetest_validate", validate);
-		map.put("geetest_seccode", validate + "|jordan");
-		final HttpPost httpPost = GTUtil.getHttpPost("http://localhost:8080/pc-geetest/validate", null, map);
-		System.out.println(GTUtil.startString(httpClient, httpPost));
 	}
 
 }
